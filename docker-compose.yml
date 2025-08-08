@@ -24,3 +24,4 @@ services:
     command: ["uv", "run", "./app/main.py"]
     volumes:
       - ./bot/app/:/app/app/
+      - ./bot/migrations/versions/:/app/migrations/versions/

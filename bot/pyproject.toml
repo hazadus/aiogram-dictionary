@@ -17,6 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "alembic>=1.16.4",
     "black>=25.1.0",
     "isort>=6.0.1",
     "mypy>=1.17.0",
