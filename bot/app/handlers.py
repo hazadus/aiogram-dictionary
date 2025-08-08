@@ -6,6 +6,7 @@ from loguru import logger
 from app.config import settings
 from app.db import SessionLocal
 from app.integrations.chatgpt import get_chatgpt_client
+from app.services.translation import get_translation
 
 router = Router()
 chatgpt_client = get_chatgpt_client()
@@ -92,6 +93,19 @@ async def message_handler(message: Message) -> None:
         await message.answer("❌ У вас нет доступа к этому боту.")
         return
 
-    translated_text = await chatgpt_client.translate_text(text=message.text)
+    try:
+        async with SessionLocal() as session:
+            translation = await get_translation(
+                session=session,
+                chatgpt_client=chatgpt_client,
+                source=message.text,
+            )
+    except Exception as e:
+        logger.error(f"Ошибка при получении перевода: {e}")
+        await message.answer(f"❌ Произошла ошибка при получении перевода: {e}")
+        return
 
-    await message.answer(translated_text, parse_mode="Markdown")
+    if translation is not None:
+        await message.answer(translation.translation, parse_mode="Markdown")
+    else:
+        await message.answer("❌ Не удалось получить перевод.")
