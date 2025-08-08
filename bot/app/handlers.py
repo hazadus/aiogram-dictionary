@@ -2,10 +2,9 @@ from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 from config import settings
+from db import SessionLocal
 from integrations.chatgpt import get_chatgpt_client
 from loguru import logger
-
-from db import SessionLocal
 
 router = Router()
 chatgpt_client = get_chatgpt_client()
