@@ -30,6 +30,12 @@ class TranslationModel(BaseModel):
         nullable=False,
         comment="Переведённый текст",
     )
+    view_count: Mapped[int] = mapped_column(
+        sa.Integer(),
+        nullable=False,
+        default=0,
+        comment="Количество просмотров перевода",
+    )
     created_at: Mapped[datetime] = mapped_column(
         sa.TIMESTAMP(timezone=True),
         server_default=CURRENT_TIMESTAMP,
