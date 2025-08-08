@@ -1,6 +1,7 @@
 from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
+from config import settings
 from integrations.chatgpt import get_chatgpt_client
 from loguru import logger
 
@@ -83,6 +84,11 @@ async def message_handler(message: Message) -> None:
     )
 
     logger.debug(f"Получено сообщение от пользователя {user_id} (@{username})")
+
+    if str(user_id) not in settings.ALLOWED_USERS:
+        logger.warning(f"Пользователь {user_id} не имеет доступа к боту")
+        await message.answer("❌ У вас нет доступа к этому боту.")
+        return
 
     translated_text = await chatgpt_client.translate_text(text=message.text)
 

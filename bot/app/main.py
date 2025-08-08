@@ -22,7 +22,6 @@ dp.include_router(router)
 
 
 async def main() -> None:
-    logger.debug("Using token: {}", settings.TELEGRAM_BOT_TOKEN)
     bot = Bot(
         token=settings.TELEGRAM_BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
