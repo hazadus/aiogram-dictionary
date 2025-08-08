@@ -1,9 +1,11 @@
-from aiogram import Bot, Router
+from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
+from integrations.chatgpt import get_chatgpt_client
 from loguru import logger
 
 router = Router()
+chatgpt_client = get_chatgpt_client()
 
 
 # MARK: Start
@@ -65,7 +67,7 @@ async def help_command_handler(message: Message) -> None:
 # MARK: Any Message
 # Должно быть после остальных обработчиков команд, чтобы не перехватывать команды
 @router.message()
-async def message_handler(message: Message, bot: Bot) -> None:
+async def message_handler(message: Message) -> None:
     """
     Обработчик всех остальных сообщений.
 
@@ -82,4 +84,6 @@ async def message_handler(message: Message, bot: Bot) -> None:
 
     logger.debug(f"Получено сообщение от пользователя {user_id} (@{username})")
 
-    await message.answer("Здесь будет перевод текста на русский язык.")
+    translated_text = await chatgpt_client.translate_text(text=message.text)
+
+    await message.answer(translated_text, parse_mode="Markdown")
