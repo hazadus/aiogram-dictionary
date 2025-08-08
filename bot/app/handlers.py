@@ -6,7 +6,7 @@ from loguru import logger
 from app.config import settings
 from app.db import SessionLocal
 from app.integrations.chatgpt import get_chatgpt_client
-from app.services.translation import get_translation
+from app.services.translation import get_stats_text, get_translation
 
 router = Router()
 chatgpt_client = get_chatgpt_client()
@@ -63,9 +63,46 @@ async def help_command_handler(message: Message) -> None:
     help_text = (
         "📋 **Доступные команды:**\n\n"
         "/start - Запустить бота и получить приветствие\n"
+        "/help - Показать список доступных команд\n"
+        "/stats - Показать статистику слов в базе\n"
     )
 
     await message.answer(help_text, parse_mode="Markdown")
+
+
+# MARK: Stats
+@router.message(Command("stats"))
+async def stats_command_handler(message: Message) -> None:
+    """
+    Обработчик команды /stats.
+
+    Отправляет пользователю подробную статистику по словам/фразам в базе данных.
+    """
+    if message.from_user is None:
+        logger.error("Получено сообщение без данных пользователя")
+        return
+
+    user_id = message.from_user.id
+    username = (
+        message.from_user.username or message.from_user.first_name or "Пользователь"
+    )
+
+    logger.debug(f"Получена команда /stats от пользователя {user_id} (@{username})")
+
+    if str(user_id) not in settings.ALLOWED_USERS:
+        logger.warning(f"Пользователь {user_id} не имеет доступа к боту")
+        await message.answer("❌ У вас нет доступа к этому боту.")
+        return
+
+    try:
+        async with SessionLocal() as session:
+            stats_text = await get_stats_text(session=session)
+    except Exception as e:
+        logger.error(f"Ошибка при получении статистики: {e}")
+        await message.answer(f"❌ Произошла ошибка при получении статистики: {e}")
+        return
+
+    await message.answer(stats_text)
 
 
 # MARK: Any Message
