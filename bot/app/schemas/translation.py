@@ -8,6 +8,10 @@ class TranslationBaseSchema(BaseModel):
 
     source: str = Field(..., title="Исходный текст")
     translation: str = Field(..., title="Переведённый текст")
+    view_count: int = Field(
+        default=1,
+        title="Количество просмотров перевода",
+    )
 
 
 class TranslationCreateSchema(TranslationBaseSchema):

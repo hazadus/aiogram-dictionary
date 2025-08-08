@@ -39,6 +39,10 @@ async def get_translation(
 
     if db_translation is not None:
         logger.debug(f"Найден перевод в БД для текста: {source}")
+        # Увеличиваем счетчик просмотров
+        db_translation.view_count += 1
+        await session.commit()
+        await session.refresh(db_translation)
         return db_translation
 
     # Если перевод не найдет, то нужно сделать перевод и сохранить его в БД
@@ -81,6 +85,7 @@ async def _add_translation(
     translation_obj = TranslationCreateSchema(
         source=source.lower(),
         translation=translation,
+        view_count=1,
     )
     db_translation = await TranslationDAO.add(
         session=session,

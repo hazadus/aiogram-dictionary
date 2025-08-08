@@ -106,6 +106,9 @@ async def message_handler(message: Message) -> None:
         return
 
     if translation is not None:
-        await message.answer(translation.translation, parse_mode="Markdown")
+        answer_text = translation.translation
+        if translation.view_count > 1:
+            answer_text += f"\n\n👁️ _Количество просмотров: {translation.view_count}_"
+        await message.answer(answer_text, parse_mode="Markdown")
     else:
         await message.answer("❌ Не удалось получить перевод.")
