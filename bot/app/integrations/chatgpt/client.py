@@ -1,14 +1,15 @@
 """Клиент для работы с ChatGPT API."""
 
 import httpx
-from integrations.chatgpt.exceptions import (
+from loguru import logger
+from pydantic import ValidationError
+
+from app.integrations.chatgpt.exceptions import (
     ChatGPTError,
     ChatGPTHTTPError,
     ChatGPTValidationError,
 )
-from integrations.chatgpt.schemas import ChatCompletionResponse
-from loguru import logger
-from pydantic import ValidationError
+from app.integrations.chatgpt.schemas import ChatCompletionResponse
 
 
 class ChatGPTClient:

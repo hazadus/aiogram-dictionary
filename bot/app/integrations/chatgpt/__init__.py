@@ -1,6 +1,6 @@
-from config import settings
-from integrations.chatgpt.client import ChatGPTClient
-from integrations.chatgpt.exceptions import (
+from app.config import settings
+from app.integrations.chatgpt.client import ChatGPTClient
+from app.integrations.chatgpt.exceptions import (
     ChatGPTError,
     ChatGPTHTTPError,
     ChatGPTValidationError,

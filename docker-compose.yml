@@ -8,7 +8,7 @@ services:
       args:
         ENV: prod
     env_file: "./bot/.env"
-    command: ["uv", "run", "./app/main.py"]
+    command: ["uv", "run", "-m", "app.main"]
     volumes:
       - ./bot/app/:/app/app/
 
@@ -21,7 +21,7 @@ services:
       args:
         ENV: dev
     env_file: "./bot/.env"
-    command: ["uv", "run", "./app/main.py"]
+    command: ["uv", "run", "-m", "app.main"]
     volumes:
       - ./bot/app/:/app/app/
       - ./bot/migrations/versions/:/app/migrations/versions/

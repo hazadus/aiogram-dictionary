@@ -2,10 +2,11 @@
 
 from typing import Any, Generic, TypeVar
 
-from models import BaseModel as SQLAlchemyBaseModel
 from pydantic import BaseModel as PydanticBaseModel
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models import BaseModel as SQLAlchemyBaseModel
 
 ModelType = TypeVar("ModelType", bound=SQLAlchemyBaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=PydanticBaseModel)

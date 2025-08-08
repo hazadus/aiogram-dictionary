@@ -4,9 +4,10 @@ import sentry_sdk
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from config import settings
-from handlers import router
 from loguru import logger
+
+from app.config import settings
+from app.handlers import router
 
 if settings.SENTRY_DSN:
     # Инициализация Sentry/Bugsink для отслеживания ошибок
