@@ -5,6 +5,8 @@ from config import settings
 from integrations.chatgpt import get_chatgpt_client
 from loguru import logger
 
+from db import SessionLocal
+
 router = Router()
 chatgpt_client = get_chatgpt_client()
 
