@@ -3,9 +3,10 @@
 from datetime import datetime
 
 import sqlalchemy as sa
-from constants import CURRENT_TIMESTAMP
-from models.base_model import BaseModel
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.constants import CURRENT_TIMESTAMP
+from app.models.base_model import BaseModel
 
 
 class TranslationModel(BaseModel):
