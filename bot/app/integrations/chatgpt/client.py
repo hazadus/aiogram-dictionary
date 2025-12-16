@@ -30,7 +30,7 @@ class ChatGPTClient:
         self,
         *,
         prompt: str,
-        model: str = "gpt-3.5-turbo",
+        model: str = "gpt-4.1-mini",
         system_message: str,
         temperature: float = 0.5,
         max_tokens: int = 1000,
@@ -66,7 +66,7 @@ class ChatGPTClient:
             "max_tokens": max_tokens,
         }
 
-        logger.debug(f"Отправка запроса к ChatGPT: {prompt[:100]}...")
+        logger.debug(f"Отправка запроса к ChatGPT ({model}): {prompt[:100]}...")
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
@@ -102,6 +102,7 @@ class ChatGPTClient:
         *,
         text: str,
         target_language: str = "русский",
+        model: str = "gpt-4.1-mini",
     ) -> str:
         """
         Переводит текст на целевой язык с помощью ChatGPT.
@@ -161,7 +162,7 @@ Example for a phrase:
 
         chat_response = await self.generate_text(
             prompt=prompt,
-            model="gpt-4o",
+            model=model,
             system_message=system_message,
             temperature=0.2,  # Низкая температура для более точного перевода
         )

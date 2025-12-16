@@ -18,6 +18,7 @@ async def get_translation(
     session: AsyncSession,
     chatgpt_client: ChatGPTClient,
     source: str,
+    model: str,
 ) -> TranslationModel | None:
     """
     Получает перевод из базы данных по исходному тексту.
@@ -50,7 +51,7 @@ async def get_translation(
         return db_translation
 
     # Если перевод не найдет, то нужно сделать перевод и сохранить его в БД
-    translated_text = await chatgpt_client.translate_text(text=source)
+    translated_text = await chatgpt_client.translate_text(text=source, model=model)
 
     db_translation = await _add_translation(
         session=session,

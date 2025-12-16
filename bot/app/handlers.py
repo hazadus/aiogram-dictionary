@@ -136,6 +136,7 @@ async def message_handler(message: Message) -> None:
                 session=session,
                 chatgpt_client=chatgpt_client,
                 source=message.text,
+                model=settings.OPENAI_MODEL_NAME,
             )
     except Exception as e:
         logger.error(f"Ошибка при получении перевода: {e}")
@@ -144,8 +145,14 @@ async def message_handler(message: Message) -> None:
 
     if translation is not None:
         answer_text = translation.translation
+
         if translation.view_count > 1:
             answer_text += f"\n\n👁️ _Количество просмотров: {translation.view_count}_"
+        else:
+            # Название модели выводим только при первом просмотре, т.к. текст точно был
+            # переведен именно текущей моделью из конфига приложения
+            answer_text += f"\n\n🧠 _Модель: {settings.OPENAI_MODEL_NAME}_"
+
         await message.answer(answer_text, parse_mode="Markdown")
     else:
         await message.answer("❌ Не удалось получить перевод.")

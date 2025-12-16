@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     SENTRY_DSN: str | None = Field(default=None)
     OPENAI_API_KEY: str
     OPENAI_API_BASE_URL: str | None = Field(default=None)
+    OPENAI_MODEL_NAME: str = Field(default="gpt-4.1-mini")
     ALLOWED_USERS: list[str]
 
     # Настройки базы данных
