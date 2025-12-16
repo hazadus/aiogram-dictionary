@@ -1,4 +1,5 @@
-from aiogram import Router
+from aiogram import Bot, Router
+from aiogram.enums import ChatAction
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 from loguru import logger
@@ -108,7 +109,7 @@ async def stats_command_handler(message: Message) -> None:
 # MARK: Any Message
 # Должно быть после остальных обработчиков команд, чтобы не перехватывать команды
 @router.message()
-async def message_handler(message: Message) -> None:
+async def message_handler(message: Message, bot: Bot) -> None:
     """
     Обработчик всех остальных сообщений.
 
@@ -136,6 +137,9 @@ async def message_handler(message: Message) -> None:
             "Отправьте английское слово или словосочетание для перевода."
         )
         return
+
+    # Показать индикатор "Печатает..."
+    await bot.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
 
     try:
         async with SessionLocal() as session:
