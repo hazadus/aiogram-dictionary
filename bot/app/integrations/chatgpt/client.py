@@ -18,9 +18,13 @@ class ChatGPTClient:
     def __init__(
         self,
         api_key: str,
+        api_base_url: str | None = None,
     ):
         self.api_key = api_key
-        self.base_url = "https://api.openai.com/v1/chat/completions"
+        self.base_url = (
+            api_base_url if api_base_url is not None else "https://api.openai.com/v1"
+        )
+        self.chat_url = self.base_url + "/chat/completions"
 
     async def generate_text(
         self,
@@ -66,7 +70,7 @@ class ChatGPTClient:
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             try:
-                response = await client.post(self.base_url, headers=headers, json=data)
+                response = await client.post(self.chat_url, headers=headers, json=data)
                 response.raise_for_status()
 
                 try:

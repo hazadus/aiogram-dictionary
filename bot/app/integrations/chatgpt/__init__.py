@@ -17,4 +17,7 @@ __all__ = [
 
 def get_chatgpt_client() -> ChatGPTClient:
     """Фабрика для создания экземпляра ChatGPTClient."""
-    return ChatGPTClient(api_key=settings.OPENAI_API_KEY)
+    return ChatGPTClient(
+        api_key=settings.OPENAI_API_KEY,
+        api_base_url=settings.OPENAI_API_BASE_URL,
+    )
