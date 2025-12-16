@@ -1,10 +1,10 @@
 """Сервис для работы с переводами и статистикой."""
 
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Sequence, Tuple
 
 from loguru import logger
-from sqlalchemy import func, select
+from sqlalchemy import Row, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import TranslationDAO
@@ -30,10 +30,7 @@ async def get_translation(
     Returns:
         TranslationModel | None: Найденная модель перевода или None.
     """
-    if source is None:
-        return None
-
-    if source.strip() == "":
+    if source is None or source.strip() == "":
         return None
 
     # Сначала пробуем найти перевод по исходному тексту в БД
@@ -81,9 +78,6 @@ async def _add_translation(
     Returns:
         TranslationModel: Созданная модель перевода
     """
-    if source is None or translation is None:
-        return None
-
     if source.strip() == "" or translation.strip() == "":
         return None
 
@@ -153,7 +147,7 @@ async def get_stats_text(*, session: AsyncSession) -> str:
     one_view_pct = (one_view_count / total_count * 100.0) if total_count else 0.0
 
     # Топ-10 по просмотрам
-    top_rows: Sequence[Tuple[str, int]] = (
+    top_rows: Sequence[Row[tuple[str, int]]] = (
         await session.execute(
             select(TranslationModel.source, TranslationModel.view_count)
             .order_by(TranslationModel.view_count.desc(), TranslationModel.source.asc())
@@ -162,7 +156,7 @@ async def get_stats_text(*, session: AsyncSession) -> str:
     ).all()
 
     # Последние 5 добавлений
-    recent_rows: Sequence[Tuple[str, datetime]] = (
+    recent_rows: Sequence[Row[tuple[str, datetime]]] = (
         await session.execute(
             select(TranslationModel.source, TranslationModel.created_at)
             .order_by(TranslationModel.created_at.desc())

@@ -130,6 +130,13 @@ async def message_handler(message: Message) -> None:
         await message.answer("❌ У вас нет доступа к этому боту.")
         return
 
+    if message.text is None:
+        logger.warning("В сообщении отсутствует текст")
+        await message.answer(
+            "Отправьте английское слово или словосочетание для перевода."
+        )
+        return
+
     try:
         async with SessionLocal() as session:
             translation = await get_translation(
