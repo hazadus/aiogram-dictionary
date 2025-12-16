@@ -34,7 +34,7 @@ jobs:
       - name: Run Deploy
         run: |
           ssh target "
-            cd /root/aiogram-dictionary &&
+            cd /usr/projects/aiogram-dictionary &&
             git pull &&
             docker compose --profile prod down &&
             docker system prune -f -a &&
