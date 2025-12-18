@@ -2,6 +2,7 @@ services:
   # MARK: PROD
   dictionary-bot:
     container_name: dictionary-bot
+    restart: unless-stopped
     profiles: ["prod"]
     build:
       context: ./bot
