@@ -18,10 +18,12 @@ services:
     container_name: dictionary-bot
     restart: unless-stopped
     profiles: ["prod"]
+    image: dictionary-bot:latest
     build:
       context: ./bot
       args:
         ENV: prod
+      network: host
     env_file: "./bot/.env"
     command: ["uv", "run", "-m", "app.main"]
     volumes:
