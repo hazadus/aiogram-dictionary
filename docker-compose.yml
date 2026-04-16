@@ -1,5 +1,19 @@
 services:
   # MARK: PROD
+  postgres:
+    image: postgres:17
+    container_name: dictionary-postgres
+    restart: unless-stopped
+    profiles: ["prod"]
+    env_file: "./bot/.env"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   dictionary-bot:
     container_name: dictionary-bot
     restart: unless-stopped
@@ -12,6 +26,9 @@ services:
     command: ["uv", "run", "-m", "app.main"]
     volumes:
       - ./bot/app/:/app/app/
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   # MARK: DEV
   bot-dev:
@@ -26,3 +43,6 @@ services:
     volumes:
       - ./bot/app/:/app/app/
       - ./bot/migrations/versions/:/app/migrations/versions/
+
+volumes:
+  postgres-data:
