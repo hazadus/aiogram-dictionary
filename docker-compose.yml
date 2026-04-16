@@ -25,7 +25,7 @@ services:
         ENV: prod
       network: host
     env_file: "./bot/.env"
-    command: ["uv", "run", "-m", "app.main"]
+    command: ["uv", "run", "--no-dev", "-m", "app.main"]
     volumes:
       - ./bot/app/:/app/app/
     depends_on:
