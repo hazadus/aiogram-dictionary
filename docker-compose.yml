@@ -6,6 +6,8 @@ services:
     restart: unless-stopped
     profiles: ["prod"]
     env_file: "./bot/.env"
+    ports:
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -24,6 +26,7 @@ services:
       args:
         ENV: prod
       network: host
+    network_mode: host
     env_file: "./bot/.env"
     command: ["uv", "run", "--no-dev", "-m", "app.main"]
     volumes:
